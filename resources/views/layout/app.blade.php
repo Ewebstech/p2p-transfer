@@ -4,7 +4,7 @@
 <!-- head -->
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 <head>
-<title>Paybills.NG | @yield('title')</title>
+<title>BlossomPay NG | @yield('title')</title>
 <link rel="stylesheet" href="/css/bootstrap-select.css"><!-- bootstrap-select-CSS -->
 <link href="/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" /><!-- bootstrap-CSS -->
 <link href="/css/font-awesome.css" rel="stylesheet" type="text/css" media="all" /><!-- Fontawesome-CSS -->
@@ -65,7 +65,7 @@ if(typeof _bsa !== 'undefined' && _bsa) {
 	<div class="container">
 		<!--logo-->
 			<div class="logo">
-				<h1><a href="/">Paybills.Ng</a></h1>
+				<h1><a href="/">Blossom Pay</a></h1>
 			</div>
 		<!--//logo-->
 		    <div class="w3layouts-login">
@@ -89,10 +89,10 @@ if(typeof _bsa !== 'undefined' && _bsa) {
 	<div class="w3l-footer-bottom">
 		<div class="container-fluid">
 			<div class="col-md-4 w3-footer-logo">
-				<h2><a href="/">PayBills.NG</a></h2>
+				<h2><a href="/">Blossom Pay</a></h2>
 			</div>
 			<div class="col-md-8 agileits-footer-class">
-				<p>© 2019 Vestro Payment Solutions. All Rights Reserved </p>
+				<p>© 2019 Blossom Payment Solutions. All Rights Reserved </p>
 			</div>
 		<div class="clearfix"> </div>
 	 	</div>

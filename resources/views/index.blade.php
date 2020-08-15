@@ -75,7 +75,7 @@
     <div class="container">
         
         <div class="col-md-12 col-sm-12 w3_agile_support_right" style="margin-top: -30px;">
-            <h5>PayBills.NG</h5>
+            <h5>Blossom Pay</h5>
             <h3>24/7 Customer Service Support</h3>
             <p>We give instant and 24-hours support to service users, re-sellers and vend partners. We understand the essence of quick issues resolution.</p>
             <div class="agile_more" style="margin-bottom: 30px; margin-top: -25px;">
