@@ -2470,17 +2470,17 @@ ul.career-start li a i {
 /*-- //support content --*/
 
 
-
-
 /*-- breadcrumbs --*/
 .w3layouts-breadcrumbs {
-	background:#DD4B39;
+	background:#192223;
 	padding:11px 0;
 	text-align:left;
+
 }
 span.agile-breadcrumbs {
     color: #fff;
-    font-size: 15px;
+	font-size: 15px;
+	float: left !important;
 }
 span.agile-breadcrumbs a {
 	color:#d0eaf7;
@@ -2510,7 +2510,7 @@ span.agile-breadcrumbs a i:hover  {
 /*-- Feedback page --*/
 .agileits-inner-banner {
     background: url(../images/4.jpg) no-repeat;
-    min-height: 200px;
+    min-height: 130px;
     background-size: cover;
     -webkit-background-size: cover;
     -moz-background-size: cover;

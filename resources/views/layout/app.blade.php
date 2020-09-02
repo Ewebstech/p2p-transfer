@@ -25,7 +25,9 @@
 <link href="/fonts.googleapis.com/css578f.css?family=Oxygen:300,400,700&amp;subset=latin-ext" rel="stylesheet">
 <link href="/fonts.googleapis.com/css9cb4.css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&amp;subset=cyrillic,cyrillic-ext,greek,greek-ext,latin-ext,vietnamese" rel="stylesheet">
 <!-- /online fonts -->
-
+<!-- Web Fonts
+============================================= -->
+<link rel='stylesheet' href='../../../fonts.googleapis.com/css2a55.css?family=Poppins:100,200,300,400,500,600,700,800,900' type='text/css'>
 @stack('styles')
        
 </head>
@@ -69,12 +71,17 @@ if(typeof _bsa !== 'undefined' && _bsa) {
 			</div>
 		<!--//logo-->
 		    <div class="w3layouts-login">
-        <a style='margin-top: -5px;' data-toggle="modal" data-target="#myModal" href="#"><i class="glyphicon glyphicon-user"> </i> Login/Register</a>
+          <?php if(isset($_SESSION['UserDetails'])){ ?>
+            <a style='margin-top: -5px;' href="/logout"><i class="glyphicon glyphicon-log-out"> </i> Logout</a>
+        <?php } else { ?>
+            <a style='margin-top: -5px;' href="/login"><i class="glyphicon glyphicon-user"> </i> Login/Register</a>
+        <?php } ?>
         <a href="/services" style='margin-top: 5px;'><i class="glyphicon glyphicon-send"> </i> Pay Bills</a>
+        
 		    </div>    
 			<div class="clearfix"></div>
     <!--Login modal-->
-        @include('includes.login_modal')
+       
     <!--//Login modal-->
     </div>
 </header>
