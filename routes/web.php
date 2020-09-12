@@ -20,6 +20,7 @@ Route::get('/test', function () {
 });
 
 
+
 Route::get('/signup', function () {
     return view('signup');
 });
@@ -27,6 +28,8 @@ Route::get('/signup', function () {
 /**
  * Authentication Routes
  */
+
+Route::get('/email', 'AuthController@viewMailTemplate');
 
 Route::post('/login', 'AuthController@loginUser')->name('login');
 
@@ -40,17 +43,33 @@ Route::group(['prefix' => '/', 'middleware' => 'redirectauth'], function(){
 
     Route::get('services','ServicesController@index')->name('services');
 
-    Route::get('payment','ServicesController@payment');
+    Route::post('payment','ServicesController@payment')->name('payment');
+
+    Route::post('takePayment','WalletController@takePayment')->name('takePayment');
+
+    Route::get('fundmywallet','WalletController@fundWalletPage')->name('fundmywallet');
+
+    Route::get('history','TransactionsController@getTransactionHistoryPage')->name('history');
+
+    Route::get('profile','ProfileController@getProfileData')->name('profile');
+
+    Route::get('change-password','ProfileController@changePassword')->name('change-password');
+
+    Route::post('change-password','ProfileController@changePassword')->name('change-password');
+
+    Route::post('history','TransactionsController@getTransactionHistoryPage')->name('history');
 
     Route::get('payment-complete','ServicesController@paymentCompleted');
 
-    Route::get('confirm-purchase','ServicesController@confirmPurchase')->name('cp');
+    Route::post('confirm-purchase','ServicesController@confirmPurchase')->name('cp');
 
     Route::get('dashboard','DashboardController@index')->name('Dashboard');
 
     Route::get('logout', 'AuthController@logout')->name('logout');
 
+
 });
 
+Route::get('/payment/callback', 'PaystackController@handleGatewayCallback');
 
 

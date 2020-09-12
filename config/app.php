@@ -165,6 +165,8 @@ return [
         
         Jenssegers\Mongodb\MongodbServiceProvider::class,
 
+        Ixudra\Curl\CurlServiceProvider::class,
+
         /*
          * Package Service Providers...
          */

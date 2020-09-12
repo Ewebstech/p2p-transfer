@@ -48,22 +48,28 @@
                         <div id="tab1" class="tab-grid">  
                         
                             <div class="login-form">	
-                            <form action="#" method="post" id="signup">
+                                @if (session('error'))
+                                    <div class="alert alert-danger" >
+                                        {{ session('error') }}
+                                    </div>
+                                @endif
+                            <form action="/confirm-purchase" method="post" id="signup">
+                                {{csrf_field()}}
                             <ol>							
                                 <li >
                                     <div class="agileits-select">
-                                    <select class="form-control" data-live-search="true" required="required" >
+                                    <select class="form-control" data-live-search="true" name="network"  required="required" >
                                         <option value="">Select Mobile Network</option>
-                                        <option value="Airtel">Airtel</option>
-                                        <option value="MTN">MTN</option>
+                                        <option value="airtel">Airtel</option>
+                                        <option value="mtn">MTN</option>
                                         <option value="9mobile">9mobile</option>
-                                        <option value="Glo">Glo</option>
+                                        <option value="glo">Glo</option>
                                     </select>
                                     </div>
                                 </li>
                                 <li>
                                     <h4>Mobile Number</h4>
-                                    <input type="tel" id="tel" class="form-control" name="tel" pattern="\d{10}" placeholder="Enter Mobile Number" required="required" />
+                                    <input type="number" id="phone" class="form-control" name="phone" pattern="\d{10}" placeholder="Enter Mobile Number" required="required" />
                                 
                                 </li>
                             
@@ -77,6 +83,8 @@
                                         <div class="clearfix"></div>
                                     </div>
                                 </li>
+
+                                <input type="hidden" name="category" value="airtime"/>
                                 <li>
                                     <input type="submit" class="submit" value="Recharge Now" />
                                 </li>

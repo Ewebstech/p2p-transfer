@@ -32,10 +32,29 @@ class AuthController extends Controller
         $this->Mailer = new MailController;
     }
 
+    public static function validateUserPin($data){
+        $requestPin = $data['pin'];
+
+        $usersModel = new Users;
+        $userData = $usersModel->getUserByWalletID($data['sessiondata']['walletID']);
+        
+        if(isset($userData['pin'])){
+            $usersPin = $userData['pin'];
+        } else {
+            $usersPin = substr($data['sessiondata']['phonenumber'], -4);
+        }
+
+        if($requestPin == $usersPin){
+            return true;
+        } else {
+            return false;
+        }
+    } 
+
     public function viewMailTemplate()
     {
         $data = [];
-        return view('emails.register', $data);
+        return view('emails.airtime', $data);
       
     }
 

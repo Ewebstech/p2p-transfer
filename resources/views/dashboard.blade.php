@@ -47,7 +47,7 @@
         <p class="lead text-center mb-5">What do you want to do today?</p>
         <div class="row">
             <div class="col-sm-6 col-lg-3 mb-4">
-                <a href="" style="text-decoration: none; color: #000">
+                <a href="/services" style="text-decoration: none; color: #000">
                 <div class="card shadow-sm border-1">
                     <div class="card-body">
                         <span class="d-block text-16 text-center text-primary my-4"><i class="fa fa-ticket fa-3x"></i></span>
@@ -59,6 +59,7 @@
             </div>
 
             <div class="col-sm-6 col-lg-3 mb-4">
+              <a href="/fundmywallet" style="text-decoration: none; color: #000">
                 <div class="card shadow-sm border-1">
                     <div class="card-body">
                         <span class="d-block text-16 text-center text-primary my-4"><i class="fa fa-credit-card fa-3x"></i></span>
@@ -66,9 +67,11 @@
                     </div>
                     
                 </div>
+              </a>
             </div>
 
             <div class="col-sm-6 col-lg-3 mb-4">
+              <a href="/history" style="text-decoration: none; color: #000">
                 <div class="card shadow-sm border-1">
                     <div class="card-body">
                         <span class="d-block text-16 text-center text-primary my-4"><i class="fa fa-history fa-3x"></i></span>
@@ -76,9 +79,11 @@
                     </div>
                     
                 </div>
+              </a>
             </div>
 
             <div class="col-sm-6 col-lg-3 mb-4">
+              <a href="/profile" style="text-decoration: none; color: #000">
                 <div class="card shadow-sm border-1">
                     <div class="card-body">
                         <span class="d-block text-16 text-center text-primary my-4"><i class="fa fa-user fa-3x"></i></span>
@@ -86,6 +91,7 @@
                     </div>
                     
                 </div>
+              </a>
             </div>
 
         </div>

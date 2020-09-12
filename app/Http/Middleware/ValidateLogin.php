@@ -20,7 +20,7 @@ class ValidateLogin
         if(!isset($_SESSION)) { session_start(); }
         if(!isset($_SESSION['UserDetails'])){
             
-            $_SESSION['PreviousUrl'] = basename($_SERVER['PHP_SELF']); 
+            $_SESSION['PreviousUrl'] = "/dashboard"; 
             return redirect('/login?cont');
         } else {
             return $next($request);

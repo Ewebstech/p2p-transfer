@@ -131,12 +131,15 @@ function submit_payment_form(fid, page, contid, reload, cb, xdata) {
         var jsonObj = JSON.parse(response);
         var status = jsonObj.status;
         var data = jsonObj.data;
+        var url = jsonObj.url;
         var message = jsonObj.message;
-        container.html(message);
-        //document.getElementById(fid).reset();  // Reset Form Data
+        container.html(data);
+        document.getElementById(fid).reset();  // Reset Form Data
         if (status == "success") {
           //console.log(data);
-          setTimeout(function(){ window.location.href = data; }, 5000);
+          //window.location.href = url + "?ref=090030";
+          if(url !== null) setTimeout(function(){ window.location.href = url; }, 3000);
+          
           
         }
       }

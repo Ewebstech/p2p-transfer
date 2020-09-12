@@ -20,7 +20,7 @@ class DashboardController extends Controller
 
         // Fetch Wallet Balance
 
-        $data['sessiondata']['walletBalance'] = WalletController::getWalletBalance($UserDetails);
+        $data['sessiondata']['walletBalance'] = WalletController::getWalletBalance($UserDetails['walletID'])['balance'];
         
         \Log::info("Session Data: ". print_r($data, true));
         

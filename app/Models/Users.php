@@ -15,7 +15,7 @@ class Users extends Eloquent
      */
 
     protected $fillable = [
-        'fullname', 'phonenumber', 'email', 'password', 'walletID', 'status'
+        'fullname', 'phonenumber', 'email', 'password', 'walletID', 'status', 'pin'
     ];
 
     protected $model;
@@ -39,6 +39,11 @@ class Users extends Eloquent
 
     public function getUserByPhoneNumber($phone){
         $user = $this->where('phonenumber', $phone)->first();
+        return ($user) ? $user->toArray() : false;
+    }
+
+    public function getUserByWalletID($walletID){
+        $user = $this->where('walletID', $walletID)->first();
         return ($user) ? $user->toArray() : false;
     }
 
