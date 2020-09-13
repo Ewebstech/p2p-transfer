@@ -42,10 +42,10 @@ class MailController extends Controller
                 $mail->Username = "nonyetech@gmail.com"; //your username. actually your email
                 $mail->Password = "chinonye247"; // your password. your mail password
             } else {
-                $mail->Host = "localhost"; //gmail has host > smtp.gmail.com
-                $mail->Port = "25"; //gmail has port > 587 . without double quotes
-                $mail->Username = "mn79gomyi4s2"; //your username. actually your email
-                $mail->Password = "Chinonye247@"; // your password. your mail password
+                $mail->Host = env("EMAIL_HOST"); //gmail has host > smtp.gmail.com
+                $mail->Port = env("EMAIL_PORT"); //gmail has port > 587 . without double quotes
+                $mail->Username = env("EMAIL_USERNAME"); //your username. actually your email
+                $mail->Password = env("EMAIL_PASSWORD"); // your password. your mail password
             }
                        
             $mail->SMTPOptions = array(
