@@ -35,19 +35,17 @@ class ServicesController extends Controller
         $data['sessiondata'] = $UserDetails;  
 
         
-        // if($data['category'] == "airtime"){
-        //     if($data['network'] == "mtn"){
-        //         $providerBalanceData = $this->getBalance($this->provider);
-        //         $providerBalance = (int) $providerBalanceData['balance'];
-        //         \Log::info("Provider Balance: " . print_r($providerBalanceData, true));
+        if($data['category'] == "airtime"){
+            
+            $providerBalanceData = $this->getBalance($this->provider);
+            $providerBalance = (int) $providerBalanceData['balance'];
+            \Log::info("Provider Balance: " . print_r($providerBalanceData, true));
 
-        //         if($providerBalanceData['error'] == true || $providerBalance < $data['amount']){
-        //             return redirect('services')->with('error', 'Service Not Available. Please try again later');
-        //         }
-
-        //     }
-        // }      
-                
+            if($providerBalanceData['error'] == true || $providerBalance < $data['amount']){
+                return redirect('services')->with('error', 'Service Not Available. Please try again later');
+            }
+            
+        }                      
    
         $data['data'] = $data;
         $URI= '/confirm-purchase';
