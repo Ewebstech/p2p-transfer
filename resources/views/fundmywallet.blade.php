@@ -13,7 +13,7 @@
 @include('includes.breadcrumb')
 <div class="w3layouts-breadcrumbs text-center">
     <div class="container">
-        <span class="agile-breadcrumbs"><a href="/dashboard"><i class="fa fa-home home_1"></i></a> / <span>Services</span></span>
+        <span class="agile-breadcrumbs"><a href="/dashboard"><i class="fa fa-home home_1"></i> Dashboard</a> / <span>Services</span></span>
     </div>
 </div>
 
@@ -28,7 +28,7 @@
           
         @if (!session('status'))
           <div class="col-lg-12 text-center mt-5">
-            <h2 class="text-8">Click to Select Wallet Funding  Method</h2>
+            <h2 class="text-8">Quick Wallet Top-up</h2>
           </div>
         @endif
           <div class="col-lg-8 col-xl-8 mx-auto mt-3">
@@ -50,7 +50,7 @@
                     <div class="tab-content my-3" id="myTabContentVertical"> 
                       <!-- Cards Details
                       ============================================= -->
-                      <div class="tab-pane fade show active" id="firstTab" role="tabpanel" aria-labelledby="first-tab">
+                      <div class=" show active" id="firstTab" role="tabpanel" aria-labelledby="first-tab">
                         <p class="text-info mb-1"><i class="fas fa-info-circle"></i> Your wallet will be credited instantly</p>
                         <form id="payment" method="post">
                           {{csrf_field()}}
@@ -63,7 +63,7 @@
                             <div id="pay-msg" style="font-size: 13px !important; margin-bottom: 10px; font-weight: 600"></div>
                           </div>
                          
-                          <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-lock"></i> Proceed to Pay</button>
+                          <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-lock"></i> Proceed to Pay Securely</button>
                         </form>
                       </div>
                       <!-- Cards Details end --> 

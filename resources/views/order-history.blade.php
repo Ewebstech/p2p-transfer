@@ -18,7 +18,7 @@
 @include('includes.breadcrumb')
 <div class="w3layouts-breadcrumbs text-center">
     <div class="container">
-        <span class="agile-breadcrumbs"><a href="/dashboard"><i class="fa fa-home home_1"></i></a> / <span>Purchase History</span></span>
+        <span class="agile-breadcrumbs"><a href="/dashboard"><i class="fa fa-home home_1"></i> Dashboard</a> / <span>Purchase History</span></span>
     </div>
 </div>
 
