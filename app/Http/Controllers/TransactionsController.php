@@ -120,10 +120,10 @@ class TransactionsController extends Controller
         $transactionModel = new Transactions;
         $check = $transactionModel->getTransactionDataViaReference($reference);
         if($check == false){
-            \Log::info("Transaction exists");
+            \Log::info("Transaction not exists");
             return false;
         } else {
-            \Log::info("Transaction not exists");
+            \Log::info("Transaction exists");
             return true;
         }
     }

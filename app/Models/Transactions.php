@@ -62,7 +62,7 @@ class Transactions extends Eloquent
     }
 
     public function getTransactionDataViaReference($ref){
-        $data = $this->where('reference', $ref)->first();
+        $data = $this->where('reference', $ref)->where('status', 'successful')->first();
         return ($data) ? $data->toArray() : false;
     }
 
