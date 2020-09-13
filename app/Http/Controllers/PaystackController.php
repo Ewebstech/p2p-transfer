@@ -169,11 +169,11 @@ class PaystackController extends Controller
             TransactionsController::updateTransactionStatus($params);
 
             $alreadyCredited = TransactionsController::findDuplicateTransactions($params['data']['reference']);
-            \Log::info("Already credited log: " . print_r($alreadyCredited, true));
+            //\Log::info("Already credited log: " . print_r($alreadyCredited, true));
 
             if($alreadyCredited === true){ 
                 // Fund my wallet
-                \Log::info("Funding Wallet" . print_r($params, true));
+                //\Log::info("Funding Wallet" . print_r($params, true));
                 WalletController::creditWallet($params['amountToCredit'], $params['metadata']['walletID']);
             }
 
