@@ -27,7 +27,7 @@ class MailController extends Controller
 
         $mailTemplate = $this->mailTemplate($params["template"],$params);
 
-        $fromAddress = "nonyetech@gmail.com";
+        $fromAddress = env("EMAIL_USERNAME");
         $replyTo = "info@blossompay.com.ng";
        
         try{
