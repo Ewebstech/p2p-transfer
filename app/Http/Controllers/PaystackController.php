@@ -165,8 +165,6 @@ class PaystackController extends Controller
             $params['data']['amount'] = $params['amount']/100;
             $params['error'] = false;
             $params['amountToCredit'] = $params['metadata']['amountToCredit'];
-            // Update Transaction
-            TransactionsController::updateTransactionStatus($params);
 
             $alreadyCredited = TransactionsController::findDuplicateTransactions($params['data']['reference']);
             //\Log::info("Already credited log: " . print_r($alreadyCredited, true));
@@ -176,6 +174,9 @@ class PaystackController extends Controller
                 //\Log::info("Funding Wallet" . print_r($params, true));
                 WalletController::creditWallet($params['amountToCredit'], $params['metadata']['walletID']);
             }
+
+            // Update Transaction
+            TransactionsController::updateTransactionStatus($params);         
 
             return redirect('fundmywallet')->with('status', 'Wallet Funding of N'. number_format($params['amountToCredit']) .' is Successful.');
             
