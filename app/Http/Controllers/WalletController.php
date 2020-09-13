@@ -152,7 +152,13 @@ class WalletController extends Controller
                 'walletID' => $walletID
             ];
 
-            $WalletModel->updateWalletData($updateArray);
+            $walletCreditInfo = $WalletModel->updateWalletData($updateArray);
+
+            if($walletCreditInfo){
+                \Log::info("Wallet Successfully Credited " . print_r($walletCreditInfo, true));
+            } else {
+                \Log::info("Wallet Credit Failed " . print_r($walletCreditInfo, true));
+            }
         }
 
     }
