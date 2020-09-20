@@ -371,7 +371,7 @@ function updateDom(url, domId) {
   xmlHttp.send(null);
 }
 
-function makeRequest(url, domId, method, xData) {
+function makeRequest(url, domId, method, xData=null) {
   alert("i am here");
   $("#" + domId).html(
     '<h2 style="padding:50px;text-align:center; margin:30px; background:#fff;">Loading... <br> <img width="48"  src="/images/loading.gif" /> </h2>'

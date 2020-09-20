@@ -103,44 +103,43 @@
                 
                     
                 <div>
-                    <div class="login-form">
-                        <i class="icon fa fa-television inner-icon" aria-hidden="true"></i>
-                            <form action="https://demo.w3layouts.com/demos_new/template_demo/06-05-2017/online_recharge-demo_Free/889104376/web/pay.html" method="post" id="signup">
-                            
-                            <ol>	
-                            <li>
-                                <div class="agileits-select">
-                                <select class="selectpicker show-tick" data-live-search="true">
-                                    <option data-tokens="Select Operator">DTH Operator</option>
-                                    <option data-tokens="Airtel">Airtel</option>
-                                    <option data-tokens="Aircel">Aircel</option>
-                                    <option data-tokens="BSNL">BSNL</option>
-                                    <option data-tokens="Tata Docomo">Tata Docomo</option>
-                                    <option data-tokens="Reliance GSM">Reliance GSM</option>
-                                    <option data-tokens="Reliance CDMA">Reliance CDMA</option>
-                                    <option data-tokens="Telenor">Telenor</option>
-                                    <option data-tokens="Jio">Jio</option>
-                                    <option data-tokens="Vodafone">Vodafone</option>
-                                    <option data-tokens="Idea">Idea</option>
-                                    <option data-tokens="MTS">MTS</option>
-                                </select>
-                                </div>
-                            </li>
-                            <li>
-                                <input type="text" id="customer" value="Enter Customer ID" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Enter Customer ID';}" required="">	
-                            </li>
-                            <li>
-                                <div class="mobile-right ">
-                                    <div class="mobile-rchge">
-                                        <input type="text" placeholder="Enter amount" name="amount" required="required"  />
+                       <div class="login-form">	
+                                @if (session('error'))
+                                    <div class="alert alert-danger" >
+                                        {{ session('error') }}
                                     </div>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </li>
-                            <li>
-                                <input type="submit" class="submit" value="Recharge Now" />
-                            </li>
-                        </ol>
+                                @endif
+                            <form action="/confirm-purchase" method="post" id="signup">
+                                {{csrf_field()}}
+                            <ol>							
+                                <li >
+                                    <h4>Select Mobile Network</h4>
+                                    <div class="agileits-select">
+                                    <select class="form-control" data-live-search="true" name="network"  id="network" onchange="setTimeout(ajax, 1,'datanetwork','network','dataPlansMSG');" required="required" >
+                                        <option value="">Select Mobile Network</option>
+                                        <option value="airtel">Airtel</option>
+                                        <option value="mtn">MTN</option>
+                                        <option value="9mobile">9mobile</option>
+                                        <option value="glo">Glo</option>
+                                    </select>
+                                    </div>
+                                    
+                                </li>
+
+                                <li>
+                                    <div class="agileits-select" id="dataPlansMSG"></div>
+                                </li>
+                                <li>
+                                    <h4>Mobile Number</h4>
+                                    <input type="number" id="phone" class="form-control" name="phone" pattern="\d{10}" placeholder="Enter Mobile Number" required="required" />
+                                
+                                </li>
+                            
+                                <input type="hidden" name="category" value="data"/>
+                                <li>
+                                    <input type="submit" class="submit" value="Buy Data" />
+                                </li>
+                            </ol>
                         </form>	
                                                                                             
                         </div>	
@@ -186,3 +185,33 @@
 
 
 @endsection
+
+@push('scripts')
+
+  <script src="js/ajax.js"></script>
+
+  <script>
+    
+    var xmlhttp = new XMLHttpRequest();
+
+    function ajax(whr, val, output) {
+        document.getElementById(output).innerHTML = "Please wait, we are verifying your details...";
+        var serverPage = "{{ route('getPlans') }}" + "?" + whr + "=" + document.getElementById(val).value;
+        console.log(serverPage);
+        xmlhttp.open("GET", serverPage);
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                document.getElementById(output).innerHTML = xmlhttp.responseText;
+            }
+        }
+        xmlhttp.send(null);
+    }
+  </script>
+
+  {{-- <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="vendor/owl.carousel/owl.carousel.min.js"></script> 
+  <script src="js/theme.js"></script>  --}}
+
+
+@endpush

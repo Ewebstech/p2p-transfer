@@ -67,6 +67,9 @@ Route::group(['prefix' => '/', 'middleware' => 'redirectauth'], function(){
 
     Route::get('logout', 'AuthController@logout')->name('logout');
 
+    Route::get('getPlans','ServicesController@getDataPlans')->name('getPlans');
+
+
 
 });
 

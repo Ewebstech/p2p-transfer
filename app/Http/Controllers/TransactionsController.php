@@ -73,6 +73,18 @@ class TransactionsController extends Controller
             $transactionData['status'] = "pending";
         }
 
+        if(isset($data['paymentData']['category']) && $data['paymentData']['category'] == "data"){
+            $transactionData['category'] = $data['paymentData']['category'];
+            $transactionData['service'] = $data['paymentData']['network'];
+            $transactionData['walletID'] = $data['sessiondata']['walletID'];
+            $transactionData['reference'] = "BLP".strtoupper(Generator::generateSecureRef(9));
+            $transactionData['phonenumber'] = $data['paymentData']['phone'];
+            $transactionData['amount'] = (int) $data['paymentData']['amount'];
+            $transactionData['description'] = $data['paymentData']['description'];
+            $transactionData['dataplan'] = $data['paymentData']['dataplan'];
+            $transactionData['status'] = "pending";
+        }
+
         if(isset($data['category']) && $data['category'] == "funding"){
             $transactionData['category'] = $data['category'];
             $transactionData['service'] = "card-fund";

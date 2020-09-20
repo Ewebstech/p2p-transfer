@@ -74,10 +74,28 @@
               
             <?php } ?>
 
+            <?php if($category == "data"){ ?>
+              <div class="row">
+                <p class="col-sm text-muted mb-0 mb-sm-3">Mobile Number:</p>
+                <p class="col-sm text-sm-right font-weight-500">{{ $phone }}</p>
+              </div>
+              
+              <div class="row">
+                <p class="col-sm text-muted mb-0 mb-sm-3">Network:</p>
+                <p class="col-sm text-sm-right font-weight-500">{{ strtoupper($network) }} </p>
+              </div>
+
+              <div class="row">
+                <p class="col-sm text-muted mb-0 mb-sm-3">Description:</p>
+                <p class="col-sm text-sm-right font-weight-500">{{ $description }}</p>
+              </div>
+              
+            <?php } ?>
+
             
             <div class="row">
               <p class="col-sm text-muted mb-0 mb-sm-3">Type:</p>
-              <p class="col-sm text-sm-right font-weight-500">{{ ucwords($category) }}</p>
+              <p class="col-sm text-sm-right font-weight-500">{{strtoupper($network)}} {{ ucwords($category) }}</p>
             </div>
            
             <div class="bg-light-4 rounded p-3">

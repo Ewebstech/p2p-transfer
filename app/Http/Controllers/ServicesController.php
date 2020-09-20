@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers;
+use App\Models\Dataplans;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProviderController;
@@ -14,6 +15,8 @@ class ServicesController extends Controller
     public function __construct()
     {
         $this->provider = "MobileNig";
+
+        $this->dataMarkupAmount = (int) env('Dataplanmarkup', 100);
     }
     
     public function index(Request $request){
@@ -22,7 +25,6 @@ class ServicesController extends Controller
         $data['sessiondata'] = $UserDetails;        
    
         
-
         $URI= '/services';
         return view($URI)->with($data);
     }
@@ -30,7 +32,7 @@ class ServicesController extends Controller
     public function confirmPurchase(Request $request){
 
         $data = parseRequest($request, true);
-        $data['amount'] = $this->formatAmount($data['amount']);
+        $data['amount'] = $this->formatAmount($data['amount'] ?? 0);
         $UserDetails = $_SESSION['UserDetails'];
         $data['sessiondata'] = $UserDetails;  
 
@@ -45,8 +47,25 @@ class ServicesController extends Controller
                 return redirect('services')->with('error', 'Service Not Available. Please try again later');
             }
             
-        }                      
+        }  
+                            
    
+        if($data['category'] == "data"){
+
+            $dataPlanInfo = Dataplans::getDataPlanAmount($data['dataplan']);
+            
+            $data['amount'] = $this->dataMarkupAmount + $dataPlanInfo['price'];
+            $data['description'] = strtoupper($dataPlanInfo['service']) ."DATA ". $dataPlanInfo['data_volume'];
+            $providerBalanceData = $this->getBalance($this->provider);
+            $providerBalance = (int) $providerBalanceData['balance'];
+            \Log::info("Provider Balance: " . print_r($providerBalanceData, true));
+
+            // if($providerBalanceData['error'] == true || $providerBalance < $data['amount']){
+            //     return redirect('services')->with('error', 'Service Not Available. Please try again later');
+            // }
+            
+        }  
+
         $data['data'] = $data;
         $URI= '/confirm-purchase';
         return view($URI)->with($data);
@@ -127,7 +146,7 @@ class ServicesController extends Controller
             \Log::info("Exception Occured During Service: " .  print_r($exceptionDetails, true));
 
             $status = "failure";
-            $data = "Exception. Please Retry";
+            $data = "Unknown Status. Please contact support before retry!";
             return $this->returnOutput($status,$data);
         }
 
@@ -152,5 +171,28 @@ class ServicesController extends Controller
         return view($URI)->with($data);
     }
 
+
+    public function getDataPlans(Dataplans $dataPlans){
+
+        $network = $_GET['datanetwork'];
+
+        $dataPlansOutput = "<h4>Choose Data Plan</h4>";
+        $dataPlansOutput .= "<select class='form-control' name='dataplan' required='required' >";
+        
+        $dataPlanList = $dataPlans->fetchDataPlans($network);
+        \Log::info("Data Plans: " . print_r($dataPlanList, true));
+
+        $price = 0;
+        foreach($dataPlanList as $plan){
+            $price = $plan['price'] + $this->dataMarkupAmount;
+            $dataPlansOutput .= "<option value='".$plan['product_code']."'>". strtoupper($network) ." ". $plan['data_volume'] ." DATA @ &#8358;".$price." </option>";
+        }
+
+        $dataPlansOutput .= "</select>";
+
+        
+        return $dataPlansOutput;
+
+    }
 
 }
