@@ -195,7 +195,7 @@
     var xmlhttp = new XMLHttpRequest();
 
     function ajax(whr, val, output) {
-        document.getElementById(output).innerHTML = "Please wait, we are verifying your details...";
+        document.getElementById(output).innerHTML = "Please wait, we are fetch the plans...";
         var serverPage = "{{ route('getPlans') }}" + "?" + whr + "=" + document.getElementById(val).value;
         console.log(serverPage);
         xmlhttp.open("GET", serverPage);
