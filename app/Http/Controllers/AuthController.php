@@ -149,7 +149,7 @@ class AuthController extends Controller
             if(isset($_SESSION['PreviousUrl'])){
                 $url = $_SESSION['PreviousUrl'];
                 unset($_SESSION['PreviousUrl']);
-                return redirect('/'.$url);
+                return redirect()->route($url);
             } else{
                 return redirect()->route('Dashboard');
             }   
