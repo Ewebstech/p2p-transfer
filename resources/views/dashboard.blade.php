@@ -119,7 +119,7 @@
                 <div class="col text-center text-sm-left">
                   <div class="">
                     <h5 class="text-3 text-body">Technical questions</h5>
-                    <p class="text-muted mb-0">Have some technical questions? Hit us up on live chat or whatever. <a class="btn-link" href="skype:live:ewebstech?chat">Click here<span class="text-1 ml-1"><i class="fa fa-skype"></i></span></a></p>
+                    <p class="text-muted mb-0">Have some technical questions? Chat us live on Skype. <a class="btn-link" href="skype:live:ewebstech?chat">Click here<span class="text-1 ml-1"><i class="fa fa-skype"></i></span></a></p>
                   </div>
                 </div>
               </div>
