@@ -45,6 +45,8 @@ class TransactionsController extends Controller
     }
 
     public static function beginTransaction($data){
+
+        //\Log::info("begin data" . print_r($data, true));
        
         $transactionData = self::buildTransactionData($data);
         
@@ -93,6 +95,21 @@ class TransactionsController extends Controller
             $transactionData['phonenumber'] = $data['phonenumber'];
             $transactionData['amount'] = (int) $data['amount'];
             $transactionData['status'] = "pending";
+        }
+
+        if(isset($data['paymentData']['category']) && $data['paymentData']['category'] == "tv"){
+            $transactionData['category'] = $data['paymentData']['category'];
+            $transactionData['service'] = $data['paymentData']['tvservice'];
+            $transactionData['walletID'] = $data['sessiondata']['walletID'];
+            $transactionData['reference'] = "BLP".strtoupper(Generator::generateSecureRef(9));
+            $transactionData['phonenumber'] = $data['paymentData']['phone'] ?? $data['paymentData']['sessiondata']['phonenumber'] ?? '';
+            $transactionData['amount'] = (int) $data['paymentData']['amount'];
+            $transactionData['status'] = "pending";
+            $transactionData['customerName'] = $data['paymentData']['validationData']['firstName'] . " " . $data['paymentData']['validationData']['lastName'];
+            $transactionData['customerNumber'] = $data['paymentData']['validationData']['customerNumber'] ?? '';
+            $transactionData['iuc'] = $data['paymentData']['iuc'] ?? '';
+            $transactionData['tvplan'] = $data['paymentData']['tvplan'] ?? '';
+
         }
 
         //\Log::info("TranData: " . print_r($transactionData, true));

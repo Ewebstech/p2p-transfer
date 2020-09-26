@@ -69,6 +69,8 @@ Route::group(['prefix' => '/', 'middleware' => 'redirectauth'], function(){
 
     Route::get('getPlans','ServicesController@getDataPlans')->name('getPlans');
 
+    Route::get('getTvPlans','ServicesController@getTvPlans')->name('getTvPlans');
+
 
 
 });

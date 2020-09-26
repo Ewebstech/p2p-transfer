@@ -69,7 +69,7 @@
               
               <div class="row">
                 <p class="col-sm text-muted mb-0 mb-sm-3">Network:</p>
-                <p class="col-sm text-sm-right font-weight-500">{{ strtoupper($network) }} </p>
+                <p class="col-sm text-sm-right font-weight-500">{{ strtoupper($network ? $network : "") }} </p>
               </div>
               
             <?php } ?>
@@ -82,7 +82,25 @@
               
               <div class="row">
                 <p class="col-sm text-muted mb-0 mb-sm-3">Network:</p>
-                <p class="col-sm text-sm-right font-weight-500">{{ strtoupper($network) }} </p>
+                <p class="col-sm text-sm-right font-weight-500">{{ strtoupper($network ? $network : "") }} </p>
+              </div>
+
+              <div class="row">
+                <p class="col-sm text-muted mb-0 mb-sm-3">Description:</p>
+                <p class="col-sm text-sm-right font-weight-500">{{ $description }}</p>
+              </div>
+              
+            <?php } ?>
+
+            <?php if($category == "tv"){ ?>
+              <div class="row">
+                <p class="col-sm text-muted mb-0 mb-sm-3">IUC/Smart Number:</p>
+                <p class="col-sm text-sm-right font-weight-500">{{ $iuc }}</p>
+              </div>
+              
+              <div class="row">
+                <p class="col-sm text-muted mb-0 mb-sm-3">TV Service:</p>
+                <p class="col-sm text-sm-right font-weight-500">{{ strtoupper($tvservice) }} </p>
               </div>
 
               <div class="row">
@@ -95,7 +113,7 @@
             
             <div class="row">
               <p class="col-sm text-muted mb-0 mb-sm-3">Type:</p>
-              <p class="col-sm text-sm-right font-weight-500">{{strtoupper($network)}} {{ ucwords($category) }}</p>
+              <p class="col-sm text-sm-right font-weight-500">{{strtoupper($network ? $network : "")}} {{ ucwords($category) }}</p>
             </div>
            
             <div class="bg-light-4 rounded p-3">

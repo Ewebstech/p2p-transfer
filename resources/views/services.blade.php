@@ -33,7 +33,8 @@
                     <div class="agileits-tab_nav">
                     <ul class="resp-tabs-list hor_1" >
                         <li style="font-size: 18px !important;"><i class="icon fa fa-mobile" aria-hidden="true" ></i>Airtime</li>
-                        <li style="font-size: 18px !important;"><i class="icon fa fa-television" aria-hidden="true"></i>Mobile Data</li>
+                        <li style="font-size: 18px !important;"><i class="icon fa fa-mobile" aria-hidden="true"></i>Mobile Data</li>
+                        <li style="font-size: 18px !important;"><i class="icon fa fa-television" aria-hidden="true"></i>TV</li>
                        
                     </ul>
                     </div>
@@ -145,6 +146,49 @@
                         </div>	
                 </div>  
 
+                <div>
+                    <div class="login-form">	
+                             @if (session('tverror'))
+                                 <div class="alert alert-danger" >
+                                     {{ session('tverror') }}
+                                 </div>
+                             @endif
+                         <form action="/confirm-purchase" method="post" id="signup">
+                             {{csrf_field()}}
+                            <ol>							
+                                <li >
+                                    <h4>Choose a TV Service</h4>
+                                    <div class="agileits-select">
+                                    <select class="form-control" data-live-search="true" name="tvservice"  id="tvservice" onchange="setTimeout(ajaxtv, 1,'tv','tvservice','tvPlansMSG');" required="required" >
+                                        <option value="">TV Service .. e.g. GOTV, DSTV, STARTIMES</option>
+                                        <option value="DSTV">DSTV</option>
+                                        <option value="GOTV">GOTV</option>
+                                        <option value="STARTIMES">STARTIMES</option>
+                                    </select>
+                                    </div>
+                                    
+                                </li>
+
+                                <li>
+                                    <div class="agileits-select" id="tvPlansMSG"></div>
+                                </li>
+
+                                <li>
+                                    <h4>IUC Number</h4>
+                                    <input type="number" id="iuc" class="form-control" name="iuc" placeholder="Enter Device IUC Number" required="required" />
+                                
+                                </li>
+
+                                <input type="hidden" name="category" value="tv"/>
+                                <li>
+                                    <input type="submit" class="submit" value="Proceed" />
+                                </li>
+                            </ol>
+                        </form>	
+                                                                                         
+                     </div>	
+             </div>  
+
               </div>
             </div>
         </div>
@@ -206,6 +250,20 @@
         }
         xmlhttp.send(null);
     }
+
+    function ajaxtv(whr, val, output) {
+        document.getElementById(output).innerHTML = "Please wait, we are fetch your bouquets...";
+        var serverPage = "{{ route('getTvPlans') }}" + "?" + whr + "=" + document.getElementById(val).value;
+        console.log(serverPage);
+        xmlhttp.open("GET", serverPage);
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                document.getElementById(output).innerHTML = xmlhttp.responseText;
+            }
+        }
+        xmlhttp.send(null);
+    }
+
   </script>
 
   {{-- <script src="vendor/jquery/jquery.min.js"></script>

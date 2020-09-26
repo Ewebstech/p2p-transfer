@@ -90,6 +90,16 @@
                 <div class="col-sm text-sm-right font-weight-600 text-success">{{ ucwords($page['status']) }}</div>
               </div>
               <hr>
+
+              <?php if(isset($page['category']) && $page['category'] == "tv") { ?>
+                
+                <div class="row">
+                  <div class="col-sm text-muted">IUC/Smart Number</div>
+                  <div class="col-sm text-sm-right font-weight-500">{{$page['iuc']}}</div>
+                </div>
+
+                <hr>
+              <?php } ?>
               
               <div class="row">
                 <div class="col-sm text-muted">Mobile No</div>
@@ -101,6 +111,8 @@
                 <div class="col-sm text-muted">Payment Amount</div>
                 <div class="col-sm text-sm-right text-6 font-weight-500">&#8358;{{$page['amount']}}</div>
               </div>
+
+              
           </div>
           
           <div class="text-center">

@@ -5,10 +5,10 @@ use MongoDB\BSON\UTCDateTime as MongoDate;
 
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
-class Dataplans extends Eloquent
+class TvPlans extends Eloquent
 {
     protected $connection = "mongodb";
-    protected $collection = 'data_plans';
+    protected $collection = 'tv_plans';
     /**
      * The attributes that are mass assignable.
      *
@@ -16,19 +16,19 @@ class Dataplans extends Eloquent
      */
 
     protected $fillable = [
-        'data_volume', 'price', 'product_code', 'service'
+        'package', 'price', 'product_code', 'service'
     ];
 
     protected $model;
 
        
-    public function fetchDataPlans($network){
+    public function fetchTvPlans($network){
         $data = $this->where('service', $network)->get();
         return ($data) ? $data->toArray() : false;
     }
     
 
-    public static function getDataPlanAmount($code){
+    public static function getTvPlanAmount($code){
         $data = self::where('product_code', $code)->first();
         return ($data) ? $data->toArray() : false;
     }

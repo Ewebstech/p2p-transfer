@@ -1,10 +1,12 @@
 <?php
 namespace App\Http\Controllers;
+use App\Models\TvPlans;
 use App\Models\Dataplans;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\TransactionsController;
+use App\Http\Controllers\Services\TV\Multichoice;
 
 
 
@@ -17,6 +19,9 @@ class ServicesController extends Controller
         $this->provider = "MobileNig";
 
         $this->dataMarkupAmount = (int) env('Dataplanmarkup', 100);
+
+        $this->tvMarkupAmount = (int) env('tvPriceMarkup', 100);
+
     }
     
     public function index(Request $request){
@@ -66,7 +71,28 @@ class ServicesController extends Controller
             
         }  
 
+        if($data['category'] == "tv"){
+
+            $tvPlanInfo = TvPlans::getTvPlanAmount($data['tvplan']);
+            
+            $data['amount'] = $this->tvMarkupAmount + $tvPlanInfo['price'];
+            $data['description'] = strtoupper($tvPlanInfo['package']) . " Subscription";
+            
+            $validation = Multichoice::validateCustomer($data);
+
+            if($validation['error'] == true){
+                return redirect('services#parentVerticalTab3')->with('tverror', $validation['message']);
+            }
+
+            $data['validationData'] = $validation['data'];
+
+            $data['network'] = "";
+            
+        }  
+
         $data['data'] = $data;
+
+        \Log::info("Data: " . print_r($data, true));
         $URI= '/confirm-purchase';
         return view($URI)->with($data);
     }
@@ -127,7 +153,7 @@ class ServicesController extends Controller
                 
             } else {
                 $status = "success";
-                $url = "/payment-complete?amount=".$amount."&reference=".$serviceResponse['data']['reference']."&phonenumber=".$serviceResponse['data']['phonenumber']."&date=".date("d-F-Y")."&status=success&service=".$serviceResponse['data']['service']."&category=".$serviceResponse['data']['category'];
+                $url = "/payment-complete?amount=".$amount."&reference=".$serviceResponse['data']['reference']."&phonenumber=".$serviceResponse['data']['phonenumber']."&date=".date("d-F-Y")."&status=success&service=".$serviceResponse['data']['service']."&category=".$serviceResponse['data']['category']."&iuc=".$serviceResponse['data']['iuc'] ?? '';
                 $data = $serviceResponse['message'] ?? 'Transaction Successful';
             }
 
@@ -192,6 +218,29 @@ class ServicesController extends Controller
 
         
         return $dataPlansOutput;
+
+    }
+
+    public function getTvPlans(TvPlans $tvPlans){
+
+        $network = $_GET['tv'];
+
+        $tvPlansOutput = "<h4>Choose a Bouquet/Package</h4>";
+        $tvPlansOutput .= "<select class='form-control' name='tvplan' required='required' >";
+        
+        $tvPlanList = $tvPlans->fetchTvPlans($network);
+        \Log::info("TV Plans: " . print_r($tvPlanList, true));
+
+        $price = 0;
+        foreach($tvPlanList as $plan){
+            $price = $plan['price'] + $this->tvMarkupAmount;
+            $tvPlansOutput .= "<option value='".$plan['product_code']."'>". $plan['package'] ." @ &#8358;".$price." </option>";
+        }
+
+        $tvPlansOutput .= "</select>";
+
+        
+        return $tvPlansOutput;
 
     }
 

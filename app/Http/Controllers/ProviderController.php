@@ -8,6 +8,7 @@ use App\Http\Controllers\Services\Data\GloData;
 use App\Http\Controllers\Services\Data\MtnData;
 use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\Services\Airtime\Airtel;
+use App\Http\Controllers\Services\TV\Multichoice;
 use App\Http\Controllers\Services\Data\AirtelData;
 use App\Http\Controllers\Services\Airtime\Etisalat;
 use App\Http\Controllers\Services\Data\EtisalatData;
@@ -60,6 +61,14 @@ class ProviderController extends Controller
                 return GloData::purchaseData($transactionData);
             }
         }
+
+        if($transactionData['service'] == "DSTV" || $transactionData['service'] == "GOTV" || $transactionData['service'] == "STARTIMES"){
+            
+            return Multichoice::subscribeNow($transactionData);
+            
+        }
+
+
     }
 
 }
