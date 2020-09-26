@@ -33,7 +33,7 @@ class ProviderController extends Controller
 
         if($transactionData['service'] == "airtel"){
             if($transactionData['category'] == "airtime"){
-                return AirtelData::purchaseAirtime($transactionData);
+                return Airtel::purchaseAirtime($transactionData);
             }
 
             if($transactionData['category'] == "data"){
@@ -43,7 +43,7 @@ class ProviderController extends Controller
 
         if($transactionData['service'] == "9mobile"){
             if($transactionData['category'] == "airtime"){
-                return EtisalatData::purchaseAirtime($transactionData);
+                return Etisalat::purchaseAirtime($transactionData);
             }
 
             if($transactionData['category'] == "data"){
@@ -53,7 +53,7 @@ class ProviderController extends Controller
 
         if($transactionData['service'] == "glo"){
             if($transactionData['category'] == "airtime"){
-                return GloData::purchaseAirtime($transactionData);
+                return Glo::purchaseAirtime($transactionData);
             }
 
             if($transactionData['category'] == "data"){
