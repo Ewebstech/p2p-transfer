@@ -15,7 +15,7 @@ class Multichoice
     protected static $provider;
     protected static $env;
     protected static $returnUrl;    
-    protected static $dataMarkupAmount;
+    protected static $tvMarkupAmount;
     
     public static function prepareParams(){
         self::$apiUrl = env('MOBILE_NIG_API_URL', 'https://mobilenig.com/API');
@@ -110,10 +110,29 @@ class Multichoice
         
                 $price = $transactionData['amount'] - self::$tvMarkupAmount;
 
+                
+
                 if(self::$env == "test"){
-                    $requestString = self::$apiUrl . "/bills/dstv_test?username=".self::$apiUsername."&api_key=".self::$apiKey."&smartno=".$transactionData['iuc']."&product_code=".$transactionData['tvplan']."&price=".$price."&customer_name=".$transactionData['customerName']."&customer_number=".$transactionData['customerNumber']."&trans_id=".$transactionData['reference']."&return_url=".self::$returnUrl;
+
+                    if($transactionData['service'] == "GOTV"){
+                        $requestString = self::$apiUrl . "/bills/gotv_test?username=".self::$apiUsername."&api_key=".self::$apiKey."&smartno=".$transactionData['iuc']."&product_code=".$transactionData['tvplan']."&price=".$price."&customer_name=".$transactionData['customerName']."&customer_number=".$transactionData['customerNumber']."&trans_id=".$transactionData['reference']."&return_url=".self::$returnUrl;
+                    } 
+
+                    if($transactionData['service'] == "DSTV"){
+                        $requestString = self::$apiUrl . "/bills/dstv_test?username=".self::$apiUsername."&api_key=".self::$apiKey."&smartno=".$transactionData['iuc']."&product_code=".$transactionData['tvplan']."&price=".$price."&customer_name=".$transactionData['customerName']."&customer_number=".$transactionData['customerNumber']."&trans_id=".$transactionData['reference']."&return_url=".self::$returnUrl;
+                    } 
+
+
+                    
                 } else {
-                    $requestString = self::$apiUrl . "/bills/dstv?username=".self::$apiUsername."&api_key=".self::$apiKey."&smartno=".$transactionData['iuc']."&product_code=".$transactionData['tvplan']."&price=".$transactionData['amount']."&customer_name=".$transactionData['customerName']."&customer_number=".$transactionData['customerNumber']."&trans_id=".$transactionData['reference']."&return_url=".self::$returnUrl;
+
+                    if($transactionData['service'] == "GOTV"){
+                        $requestString = self::$apiUrl . "/bills/gotv?username=".self::$apiUsername."&api_key=".self::$apiKey."&smartno=".$transactionData['iuc']."&product_code=".$transactionData['tvplan']."&price=".$transactionData['amount']."&customer_name=".$transactionData['customerName']."&customer_number=".$transactionData['customerNumber']."&trans_id=".$transactionData['reference']."&return_url=".self::$returnUrl;
+                    }
+
+                    if($transactionData['service'] == "DSTV"){
+                        $requestString = self::$apiUrl . "/bills/dstv?username=".self::$apiUsername."&api_key=".self::$apiKey."&smartno=".$transactionData['iuc']."&product_code=".$transactionData['tvplan']."&price=".$transactionData['amount']."&customer_name=".$transactionData['customerName']."&customer_number=".$transactionData['customerNumber']."&trans_id=".$transactionData['reference']."&return_url=".self::$returnUrl;
+                    }
                 }
                 
                 \Log::info("Sending Service Request to " . self::$provider . ": $requestString " . print_r($parameters, true));
