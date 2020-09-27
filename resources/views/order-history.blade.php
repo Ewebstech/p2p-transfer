@@ -72,7 +72,7 @@
 
                     @foreach ($transactions as $transaction)
                     <tr>
-                      <td style="text-align: left !important;">{{ strtoupper($sessiondata['walletID']) }} </td>
+                      <td style="text-align: left !important;">{{ strtoupper($transaction['walletID']) }} </td>
                       <td style="text-align: left !important;">{{ strtoupper($transaction['service']) }} </td>
                       <td style="text-align: left !important;">	&#8358; {{ $transaction['amount'] }}</td>
                       <td style="text-align: left !important;">{{ strtoupper($transaction['status']) }}</td>
