@@ -78,7 +78,7 @@ class Transactions extends Eloquent
         
         $data = $this->where('created_at', '>=', $startDate)
                     ->where('created_at', '<=', $endDate)
-                    ->latest()
+                    ->orderBy('created_at', 'DESC')
                     ->get();
         return ($data) ? $data->toArray() : [];
     }
