@@ -25,7 +25,7 @@ class Multichoice
         self::$provider = env('TVProvider', 'MobileNig');
         self::$env = env('Environment', 'test');
         self::$returnUrl = env('RETURN_URL', 'https://blossompay.com.ng/callback');
-        self::$dataMarkupAmount = (int) env('Dataplanmarkup', 0);
+        self::$tvMarkupAmount = (int) env('tvPriceMarkup', 0);
     }
 
 
@@ -108,7 +108,7 @@ class Multichoice
                     'timeout' => 8
                 ];
         
-                $price = $transactionData['amount'] - self::$dataMarkupAmount;
+                $price = $transactionData['amount'] - self::$tvMarkupAmount;
 
                 if(self::$env == "test"){
                     $requestString = self::$apiUrl . "/bills/dstv_test?username=".self::$apiUsername."&api_key=".self::$apiKey."&smartno=".$transactionData['iuc']."&product_code=".$transactionData['tvplan']."&price=".$price."&customer_name=".$transactionData['customerName']."&customer_number=".$transactionData['customerNumber']."&trans_id=".$transactionData['reference']."&return_url=".self::$returnUrl;

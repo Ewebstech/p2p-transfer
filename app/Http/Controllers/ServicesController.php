@@ -20,7 +20,7 @@ class ServicesController extends Controller
 
         $this->dataMarkupAmount = (int) env('Dataplanmarkup', 100);
 
-        $this->tvMarkupAmount = (int) env('tvPriceMarkup', 100);
+        $this->tvMarkupAmount = (int) env('tvPriceMarkup', 0);
 
     }
     
