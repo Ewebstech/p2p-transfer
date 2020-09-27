@@ -59,6 +59,7 @@
                 <table id="example" class="table table-hover table-responsive" style="width:100%;">
                   <thead class="thead-light">
                     <tr>
+                      <th style="text-align: left !important;">Wallet ID</th>
                       <th style="text-align: left !important;">Service</th>
                       <th style="text-align: left !important;">Amount</th>
                       <th style="text-align: left !important;">Status</th>
@@ -71,6 +72,7 @@
 
                     @foreach ($transactions as $transaction)
                     <tr>
+                      <td style="text-align: left !important;">{{ strtoupper($sessiondata['walletID']) }} </td>
                       <td style="text-align: left !important;">{{ strtoupper($transaction['service']) }} </td>
                       <td style="text-align: left !important;">	&#8358; {{ $transaction['amount'] }}</td>
                       <td style="text-align: left !important;">{{ strtoupper($transaction['status']) }}</td>

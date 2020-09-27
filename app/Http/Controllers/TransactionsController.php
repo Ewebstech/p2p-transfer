@@ -30,16 +30,29 @@ class TransactionsController extends Controller
             $params['endDate'] = date("Y-m-d");
         }
 
+        $allTransactions = false;
+
+        $adminSettings = env('admins', '8133918455,7016484057');
+        $admins = explode(",", $adminSettings);
+
+        if(in_array($UserDetails['walletID'],$admins)){
+            $allTransactions = true;
+        }
+
         $params['walletID'] = $UserDetails['walletID'];
 
-        $data['transactions'] = $this->getTransactions($params);
+        $data['transactions'] = $this->getTransactions($params, $allTransactions);
         $URI= '/order-history';
         return view($URI)->with($data);
     }
 
-    public function getTransactions($params){
+    public function getTransactions($params, $allTransactions){
         $transactionModel = new Transactions;
-        $myTransactions =  $transactionModel->getTransactionDataViaWalletIDWithDateRange($params);
+        if($allTransactions == true){
+            $myTransactions =  $transactionModel->getTransactionData($params);
+        } else {
+            $myTransactions =  $transactionModel->getTransactionData($params);
+        }
         return $myTransactions;
         \Log::info("My Transactions " . print_r($myTransactions, true));
     }
