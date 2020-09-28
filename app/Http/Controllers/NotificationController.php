@@ -37,6 +37,48 @@ class NotificationController
             $sendMail = $Mailer->sendMail($mailParams);
             \Log::info("Email Notification Response to : " . $UserDetails['email'] . " " . $sendMail);
         }
+
+        if($category == "data"){
+            // Send Email to User
+            $mailParams = [
+                'Name' => $UserDetails['fullname'],
+                'Email' => $UserDetails['email'],
+                'service' => strtoupper($transactionData['data']['service']),
+                'category' => $category,
+                'phonenumber' => $transactionData['data']['phonenumber'],
+                'amount' => $transactionData['data']['amount'],
+                'phonenumber' => $transactionData['data']['phonenumber'],
+                'date' => date("d F, Y"),
+                'reference' => $transactionData['data']['reference'],
+                'Subject' => 'Data Purchase Reciept - '. strtoupper($transactionData['data']['service']),
+                'status' => $status,
+                'template' => 'data'
+            ];
+
+            $sendMail = $Mailer->sendMail($mailParams);
+            \Log::info("Email Notification Response to : " . $UserDetails['email'] . " " . $sendMail);
+        }
+
+        if($category == "tv"){
+            // Send Email to User
+            $mailParams = [
+                'Name' => $UserDetails['fullname'],
+                'Email' => $UserDetails['email'],
+                'service' => strtoupper($transactionData['data']['service']),
+                'category' => $category,
+                'amount' => $transactionData['data']['amount'],
+                'phonenumber' => $transactionData['data']['phonenumber'],
+                'date' => date("d F, Y"),
+                'reference' => $transactionData['data']['reference'],
+                'Subject' => 'TV Subscription Reciept - '. strtoupper($transactionData['data']['service']),
+                'status' => $status,
+                'iuc' => $transactionData['data']['iuc'] ?? '',
+                'template' => 'tv'
+            ];
+
+            $sendMail = $Mailer->sendMail($mailParams);
+            \Log::info("Email Notification Response to : " . $UserDetails['email'] . " " . $sendMail);
+        }
         
 
     }

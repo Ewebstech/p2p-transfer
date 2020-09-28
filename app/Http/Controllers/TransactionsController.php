@@ -18,7 +18,7 @@ class TransactionsController extends Controller
         $UserDetails = $_SESSION['UserDetails'];
         $data['sessiondata'] = $UserDetails;
 
-        \Log::info("User data " . print_r($UserDetails, true));
+        //\Log::info("User data " . print_r($UserDetails, true));
 
         // Fetch Transactions for today
         if(isset($requestParams['daterange'])){
