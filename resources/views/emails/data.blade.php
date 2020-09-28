@@ -68,6 +68,10 @@ table td[class="tablepadding"] {
                           <td style="font-size:14px; line-height:20px; padding: 10px 0 10px 5px; border-top: 1px solid #eaebed; border-bottom: 1px solid #eaebed; color: #404040; font-weight: bold;" valign="top" align="right">{{$phonenumber}}</td>
                         </tr>
                         <tr>
+                          <td style="font-size:14px; line-height:20px; border-top: 1px solid #eaebed; border-bottom: 1px solid #eaebed; color:#808080">Description</td>
+                          <td style="font-size:14px; line-height:20px; padding: 10px 0 10px 5px; border-top: 1px solid #eaebed; border-bottom: 1px solid #eaebed; color: #404040; font-weight: bold;" valign="top" align="right">{{$description}}</td>
+                        </tr>
+                        <tr>
                           <td style="font-size:14px; line-height:20px; border-bottom: 1px solid #eaebed; color:#808080">Service</td>
                           <td style="font-size:14px; line-height:20px; padding: 10px 0 10px 5px; border-bottom: 1px solid #eaebed; color: #404040; font-weight: bold;" valign="top" align="right">{{$service}}</td>
                         </tr>

@@ -48,6 +48,7 @@ class NotificationController
                 'phonenumber' => $transactionData['data']['phonenumber'],
                 'amount' => $transactionData['data']['amount'],
                 'phonenumber' => $transactionData['data']['phonenumber'],
+                'description' => $transactionData['data']['description'] ?? '',
                 'date' => date("d F, Y"),
                 'reference' => $transactionData['data']['reference'],
                 'Subject' => 'Data Purchase Reciept - '. strtoupper($transactionData['data']['service']),
