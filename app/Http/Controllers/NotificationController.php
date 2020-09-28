@@ -38,7 +38,7 @@ class NotificationController
             \Log::info("Email Notification Response to : " . $UserDetails['email'] . " " . $sendMail);
         }
 
-        if($category == "data"){
+        if($category == "Data"){
             // Send Email to User
             $mailParams = [
                 'Name' => $UserDetails['fullname'],
@@ -59,7 +59,7 @@ class NotificationController
             \Log::info("Email Notification Response to : " . $UserDetails['email'] . " " . $sendMail);
         }
 
-        if($category == "tv"){
+        if($category == "Tv"){
             // Send Email to User
             $mailParams = [
                 'Name' => $UserDetails['fullname'],
