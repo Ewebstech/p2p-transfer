@@ -39,7 +39,7 @@ class Multichoice
                 'headers' => [
                     'Content-Type' =>'application/json'
                 ],
-                'timeout' => 20
+                'timeout' => 30
             ];
     
             if(self::$env == "test"){
@@ -73,7 +73,7 @@ class Multichoice
 
             return $response;
 
-        } catch (\Exception $e){
+        } catch (\Exception | RequestException $e){
 
             $exceptionDetails = [
 				'message' => $e->getMessage(),
@@ -86,9 +86,11 @@ class Multichoice
     
             $response = [
                 'error' => true,
-                'message' => "System Error. Please confirm e-reciept before retry!",
+                'message' => "Network Error. Please retry.",
                 'data' => $transactionData
             ];
+
+            return $response;
 
         }
 
@@ -163,7 +165,7 @@ class Multichoice
 
                     } else {
 
-                        $queryResponse = self::queryAirtime($transactionData);
+                        $queryResponse = self::queryMultichoice($transactionData);
                         if(isset($queryResponse['code'])){
                             $response = [
                                 'error' => true,
@@ -196,16 +198,28 @@ class Multichoice
             
             \Log::info("Exception occured during service status check: " .  print_r($exceptionDetails, true));
     
-            $response = [
-                'error' => true,
-                'message' => "System Error. Please confirm e-reciept before retry!",
-                'data' => $transactionData
-            ];
+            $queryResponse = self::queryMultichoice($transactionData);
+            if(isset($queryResponse['code'])){
+                $response = [
+                    'error' => true,
+                    'message' => "Network Error. Please confirm e-reciept before retry!",
+                    'data' => $transactionData
+                ];
+
+            } else {
+                $response = [
+                    'error' => false,
+                    'message' => "Transaction Approved",
+                    'data' => array_merge($transactionData, $queryResponse)
+                ];
+            }
+
+            return $response;
 
         }
     }
 
-    private static function queryAirtime($transactionData){
+    private static function queryMultichoice($transactionData){
         $parameters = [
             'headers' => [
                 'Content-Type' =>'application/json'
@@ -214,9 +228,23 @@ class Multichoice
         ];
 
         if(self::$env == "test"){
-            $requestString = self::$apiUrl . "/airtime_premium_query?username=".self::$apiUsername."&api_key=".self::$apiKey."&trans_id=".$transactionData['reference'];
+
+            if($transactionData['service'] == "GOTV"){
+                $requestString = self::$apiUrl . "/gotv_query?username=".self::$apiUsername."&api_key=".self::$apiKey."&trans_id=".$transactionData['reference'];
+            } 
+
+            if($transactionData['service'] == "DSTV"){
+                $requestString = self::$apiUrl . "/dstv_query?username=".self::$apiUsername."&api_key=".self::$apiKey."&trans_id=".$transactionData['reference'];
+            } 
+            
         } else {
-            $requestString = self::$apiUrl . "/airtime_premium_query?username=".self::$apiUsername."&api_key=".self::$apiKey."&trans_id=".$transactionData['reference'];
+            if($transactionData['service'] == "GOTV"){
+                $requestString = self::$apiUrl . "/gotv_query?username=".self::$apiUsername."&api_key=".self::$apiKey."&trans_id=".$transactionData['reference'];
+            } 
+
+            if($transactionData['service'] == "DSTV"){
+                $requestString = self::$apiUrl . "/dstv_query?username=".self::$apiUsername."&api_key=".self::$apiKey."&trans_id=".$transactionData['reference'];
+            } 
         }
         
         \Log::info("Sending Service Query to " . self::$provider . ": $requestString " . print_r($parameters, true));

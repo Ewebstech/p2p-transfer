@@ -113,11 +113,23 @@ class AirtelData
             
             \Log::info("Exception occured during service status check: " .  print_r($exceptionDetails, true));
     
-            $response = [
-                'error' => true,
-                'message' => "System Error. Please confirm e-reciept before retry!",
-                'data' => $transactionData
-            ];
+            $queryResponse = self::queryAirtime($transactionData);
+            if(isset($queryResponse['code'])){
+                $response = [
+                    'error' => true,
+                    'message' => "Network Error. Please confirm e-reciept before retry!",
+                    'data' => $transactionData
+                ];
+
+            } else {
+                $response = [
+                    'error' => false,
+                    'message' => "Transaction Approved",
+                    'data' => array_merge($transactionData, $queryResponse)
+                ];
+            }
+
+            return $response;
 
         }
     }
@@ -131,9 +143,9 @@ class AirtelData
         ];
 
         if(self::$env == "test"){
-            $requestString = self::$apiUrl . "/airtime_premium_query?username=".self::$apiUsername."&api_key=".self::$apiKey."&trans_id=".$transactionData['reference'];
+            $requestString = self::$apiUrl . "/data_query?username=".self::$apiUsername."&api_key=".self::$apiKey."&trans_id=".$transactionData['reference'];
         } else {
-            $requestString = self::$apiUrl . "/airtime_premium_query?username=".self::$apiUsername."&api_key=".self::$apiKey."&trans_id=".$transactionData['reference'];
+            $requestString = self::$apiUrl . "/data_query?username=".self::$apiUsername."&api_key=".self::$apiKey."&trans_id=".$transactionData['reference'];
         }
         
         \Log::info("Sending Service Query to " . self::$provider . ": $requestString " . print_r($parameters, true));

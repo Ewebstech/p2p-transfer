@@ -153,8 +153,16 @@ class ServicesController extends Controller
                 
             } else {
                 $status = "success";
-                $url = "/payment-complete?amount=".$amount."&reference=".$serviceResponse['data']['reference']."&phonenumber=".$serviceResponse['data']['phonenumber']."&date=".date("d-F-Y")."&status=success&service=".$serviceResponse['data']['service']."&category=".$serviceResponse['data']['category']."&iuc=".$serviceResponse['data']['iuc'] ?? '';
+                if(isset($serviceResponse['data']['iuc'])){
+                    $iuc = $serviceResponse['data']['iuc'];
+                } else {
+                    $iuc = "";
+                }
+                
+                $url = "/payment-complete?amount=".$amount."&reference=".$serviceResponse['data']['reference']."&phonenumber=".$serviceResponse['data']['phonenumber']."&date=".date("d-F-Y")."&status=success&service=".$serviceResponse['data']['service']."&category=".$serviceResponse['data']['category']."&iuc=".$iuc ?? '';
+
                 $data = $serviceResponse['message'] ?? 'Transaction Successful';
+
             }
 
             // Send Response

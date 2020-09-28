@@ -93,9 +93,30 @@
             <?php } ?>
 
             <?php if($category == "tv"){ ?>
+
+              <div class="row">
+                <p class="col-sm text-muted mb-0 mb-sm-3">Account Status:</p>
+                <p class="col-sm text-sm-right font-weight-500"><b>{{ $validationData['accountStatus'] }}</b></p>
+              </div>
+
+              <div class="row">
+                <p class="col-sm text-muted mb-0 mb-sm-3">Customer Name:</p>
+                <p class="col-sm text-sm-right font-weight-500">{{ $validationData['firstName'] }} {{ $validationData['lastName'] }}</p>
+              </div>
+
+              <div class="row">
+                <p class="col-sm text-muted mb-0 mb-sm-3">Customer Type:</p>
+                <p class="col-sm text-sm-right font-weight-500"> {{ $validationData['customerType'] }}</p>
+              </div>
+
               <div class="row">
                 <p class="col-sm text-muted mb-0 mb-sm-3">IUC/Smart Number:</p>
                 <p class="col-sm text-sm-right font-weight-500">{{ $iuc }}</p>
+              </div>
+
+              <div class="row">
+                <p class="col-sm text-muted mb-0 mb-sm-3">Due Date:</p>
+                <p class="col-sm text-sm-right font-weight-500">{{ date('jS-M-Y', strtotime($validationData['dueDate'])) }}</p>
               </div>
               
               <div class="row">

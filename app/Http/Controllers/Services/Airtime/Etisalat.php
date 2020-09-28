@@ -109,11 +109,23 @@ class Etisalat
             
             \Log::info("Exception occured during service status check: " .  print_r($exceptionDetails, true));
     
-            $response = [
-                'error' => true,
-                'message' => "System Error. Please confirm e-reciept before retry!",
-                'data' => $transactionData
-            ];
+            $queryResponse = self::queryAirtime($transactionData);
+            if(isset($queryResponse['code'])){
+                $response = [
+                    'error' => true,
+                    'message' => "Network Error. Please confirm e-reciept before retry!",
+                    'data' => $transactionData
+                ];
+
+            } else {
+                $response = [
+                    'error' => false,
+                    'message' => "Transaction Approved",
+                    'data' => array_merge($transactionData, $queryResponse)
+                ];
+            }
+
+            return $response;
 
         }
     }
