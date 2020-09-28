@@ -52,7 +52,7 @@ table td[class="tablepadding"] {
                       <tbody>
                         <tr>
                           <td style="font-size:14px; line-height:20px; padding:0px 25px;"><img alt="" src="mobile-successful.png"></td>
-                          <td style="font-size:16px; font-weight:600; color:#777; line-height:26px; padding-right:20px;">Hi, {{$Name}}, your  {{$category}} recharge payment of <span style="color:#000;">&#8358;{{$amount}}</span> for Mobile No. <span style="color:#000;">{{$phonenumber}}</span> is now <span style="color:#28a745;">{{$status}}!</span></td>
+                          <td style="font-size:16px; font-weight:600; color:#777; line-height:26px; padding-right:20px;">Hi, {{$Name}}, your  {{$category}} recharge payment of <span style="color:#000;">&#8358;{{$amount}}</span> for Decoder. <span style="color:#000;">{{$iuc}}</span> is now <span style="color:#28a745;">{{$status}}!</span></td>
                         </tr>
                       </tbody>
                     </table></td>
