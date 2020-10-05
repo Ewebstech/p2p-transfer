@@ -37,5 +37,10 @@ class Wallets extends Eloquent
         return ($walletdata) ? $walletdata->toArray() : false;
     }
 
+    public function fetchAllWallets(){
+        $walletdata = $this->all();
+        return ($walletdata) ? $walletdata->toArray() : false;
+    }
+
 
 }

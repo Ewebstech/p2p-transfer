@@ -51,7 +51,7 @@ class TransactionsController extends Controller
         if($allTransactions == true){
             $myTransactions =  $transactionModel->getTransactionData($params);
         } else {
-            $myTransactions =  $transactionModel->getTransactionData($params);
+            $myTransactions =  $transactionModel->getTransactionDataViaWalletIDWithDateRange($params);
         }
         return $myTransactions;
         \Log::info("My Transactions " . print_r($myTransactions, true));
@@ -70,6 +70,24 @@ class TransactionsController extends Controller
             return $transactionData;
         } else {
             \Log::info("Transaction Failed to Initialized with data: " . print_r($transactionData, true));
+            return $saveData;
+        }
+        
+    }
+
+    public static function appendTransaction($data){
+
+        //\Log::info("begin data" . print_r($data, true));
+       
+        $transactionData = self::buildTransactionData($data);
+        
+        $transactionModel = new Transactions;
+        $saveData = $transactionModel->insertTransactionData($transactionData);
+        if($saveData){
+            \Log::info("Transaction Inserted Successfully with data: " . print_r($transactionData, true));
+            return $transactionData;
+        } else {
+            \Log::info("Transaction Failed to Insert with data: " . print_r($transactionData, true));
             return $saveData;
         }
         
@@ -108,6 +126,17 @@ class TransactionsController extends Controller
             $transactionData['phonenumber'] = $data['phonenumber'];
             $transactionData['amount'] = (int) $data['amount'];
             $transactionData['status'] = "pending";
+        }
+
+        if(isset($data['category']) && $data['category'] == "MNFD"){
+            $transactionData['category'] = $data['category'];
+            $transactionData['service'] = $data['service'];
+            $transactionData['walletID'] = $data['walletID'];
+            $transactionData['reference'] = "BLPMNFP".strtoupper(Generator::generateSecureRef(6));
+            $transactionData['phonenumber'] = $data['phonenumber'];
+            $transactionData['amount'] = (int) $data['amount'];
+            $transactionData['remark'] = $data['remark'];
+            $transactionData['status'] = "successful";
         }
 
         if(isset($data['paymentData']['category']) && $data['paymentData']['category'] == "tv"){

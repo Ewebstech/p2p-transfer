@@ -71,7 +71,17 @@ Route::group(['prefix' => '/', 'middleware' => 'redirectauth'], function(){
 
     Route::get('getTvPlans','ServicesController@getTvPlans')->name('getTvPlans');
 
+    // Admin Routes
 
+    Route::get('admin/manual-funding','AdminController@getManualWalletFundPage');
+    Route::post('admin/manual-fund','AdminController@fundWalletManually')->name('fundRequest');
+
+    Route::get('admin/funding-history','AdminController@getFundHistoryPage');
+
+    Route::get('admin/wallets','AdminController@getWalletsPage');
+
+
+    
 
 });
 

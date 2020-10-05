@@ -134,8 +134,10 @@ class WalletController extends Controller
             $walletCreditInfo = $WalletModel->saveWalletData($data);
             if($walletCreditInfo){
                 \Log::info("Wallet Successfully Credited " . print_r($walletCreditInfo, true));
+                return true;
             } else {
                 \Log::info("Wallet Credit Failed " . print_r($walletCreditInfo, true));
+                return false;
             }
             
         } else {
@@ -156,8 +158,10 @@ class WalletController extends Controller
 
             if($walletCreditInfo){
                 \Log::info("Wallet Successfully Credited with $amountToCredit");
+                return true;
             } else {
                 \Log::info("Wallet Credit Failed ");
+                return false;
             }
         }
 

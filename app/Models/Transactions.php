@@ -16,12 +16,19 @@ class Transactions extends Eloquent
      */
 
     protected $fillable = [
-        'reference', 'walletID', 'amount', 'service', 'category', 'phonenumber', 'accountNo', 'status', 'fee', 'commission'
+        'reference', 'walletID', 'amount', 'service', 'category', 'phonenumber', 'accountNo', 'status', 'fee', 'commission', 'remark'
     ];
 
     protected $model;
 
     public function initializeTransactionData($data){
+
+        $saveData = $this->create($data);
+        return ($saveData) ? true : false;
+
+    }
+
+    public function insertTransactionData($data){
 
         $saveData = $this->create($data);
         return ($saveData) ? true : false;
@@ -83,8 +90,37 @@ class Transactions extends Eloquent
         return ($data) ? $data->toArray() : [];
     }
 
+    public function getFundingTransactionData($params){
+
+        $startDate = "";
+        $endDate = "";
+
+        if (isset($params['startDate'])) {
+            $requestStartDate = date("Y-m-d", strtotime($params['startDate']));
+            $startDate = new MongoDate(strtotime($requestStartDate . " 00:00:00") * 1000);
+        }
+
+        if (isset($params['endDate'])) {
+            $requestEndDate = date("Y-m-d", strtotime($params['endDate']));
+            $endDate = new MongoDate(strtotime($requestEndDate . " 23:59:59") * 1000);
+        }
+        
+        $data = $this->where('created_at', '>=', $startDate)
+                    ->where('created_at', '<=', $endDate)
+                    ->where('category', 'MNFD')
+                    ->orderBy('created_at', 'DESC')
+                    ->get();
+        
+        return ($data) ? $data->toArray() : [];
+    }
+
     public function getTransactionDataViaReference($ref){
         $data = $this->where('reference', $ref)->where('status', 'successful')->first();
+        return ($data) ? $data->toArray() : false;
+    }
+
+    public function getAllTransactionDataViaReference($ref){
+        $data = $this->where('reference', $ref)->first();
         return ($data) ? $data->toArray() : false;
     }
 
