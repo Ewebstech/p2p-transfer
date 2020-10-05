@@ -71,13 +71,27 @@ if(typeof _bsa !== 'undefined' && _bsa) {
 			</div>
 		<!--//logo-->
 		    <div class="w3layouts-login">
-          <?php if(isset($_SESSION['UserDetails'])){ ?>
+          <?php if(isset($_SESSION['UserDetails'])){ 
+            $adminSettings = env('admins', '813391845,7016484057');
+            $admins = explode(",", $adminSettings);
+
+            if(in_array($_SESSION['UserDetails']['walletID'],$admins)){
+                $admin = "true";
+
+            }             
+
+            ?>
+            
             <a style='margin-top: -5px;' href="/logout"><i class="glyphicon glyphicon-log-out"> </i> Logout</a>
         <?php } else { ?>
             <a style='margin-top: -5px;' href="/login"><i class="glyphicon glyphicon-user"> </i> Login/Register</a>
         <?php } ?>
-        <a href="/services" style='margin-top: 5px;'><i class="glyphicon glyphicon-send"> </i> Pay Bills</a>
         
+        <?php if(isset($admin) && $admin == "true") { ?>
+          <a href="/admin/manual-funding" style='margin-top: 5px;'><i class="glyphicon glyphicon-send"> </i> Admin</a>
+        <?php } else { ?>
+          <a href="/services" style='margin-top: 5px;'><i class="glyphicon glyphicon-send"> </i> Pay Bills</a>
+        <?php } ?>
 		    </div>    
 			<div class="clearfix"></div>
     <!--Login modal-->
