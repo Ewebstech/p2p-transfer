@@ -72,7 +72,7 @@ if(typeof _bsa !== 'undefined' && _bsa) {
 		<!--//logo-->
 		    <div class="w3layouts-login">
           <?php if(isset($_SESSION['UserDetails'])){ 
-            $adminSettings = env('admins', '813391845,7016484057');
+            $adminSettings = env('admins', '8133918455,7016484057');
             $admins = explode(",", $adminSettings);
 
             if(in_array($_SESSION['UserDetails']['walletID'],$admins)){
