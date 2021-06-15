@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Models\Wallets;
-use App\Mail\resetPassword;
-use App\ResetPasswordToken;
 use Illuminate\Http\Request;
 use App\Helpers\HttpStatusCodes;
 use App\Http\Controllers\Generator;

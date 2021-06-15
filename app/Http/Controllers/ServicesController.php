@@ -1,12 +1,9 @@
 <?php
 namespace App\Http\Controllers;
-use App\Models\TvPlans;
-use App\Models\Dataplans;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\TransactionsController;
-use App\Http\Controllers\Services\TV\Multichoice;
 
 class ServicesController extends Controller
 {
