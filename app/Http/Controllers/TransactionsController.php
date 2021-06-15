@@ -5,198 +5,123 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Generator;
 use App\Http\Controllers\AuthController;
 
-
 class TransactionsController extends Controller
 {
     protected $helper;
-    
 
-    public function getTransactionHistoryPage(Request $request){
-
+    public function getTransactionHistoryPage(Request $request)
+    {
         $requestParams = parseRequest($request, true);
 
-        $UserDetails = $_SESSION['UserDetails'];
-        $data['sessiondata'] = $UserDetails;
-
-        //\Log::info("User data " . print_r($UserDetails, true));
-
         // Fetch Transactions for today
-        if(isset($requestParams['daterange'])){
-            $dateArray = explode("-", $requestParams['daterange']);
+        if (isset($requestParams['daterange'])) {
+            $dateArray = explode('-', $requestParams['daterange']);
             $params['startDate'] = $dateArray[0];
             $params['endDate'] = $dateArray[1];
         } else {
-            $params['startDate'] = date("Y-m-d");
-            $params['endDate'] = date("Y-m-d");
+            $params['startDate'] = date('Y-m-d');
+            $params['endDate'] = date('Y-m-d');
         }
 
-        $allTransactions = false;
+        $params['walletID'] = $requestParams['walletId'];
 
-        $adminSettings = env('admins', '8133918455,7016484057');
-        $admins = explode(",", $adminSettings);
+        $data['transactions'] = $this->getTransactions($params);
 
-        if(in_array($UserDetails['walletID'],$admins)){
-            $allTransactions = true;
-        }
-
-        $params['walletID'] = $UserDetails['walletID'];
-
-        $data['transactions'] = $this->getTransactions($params, $allTransactions);
-        $URI= '/order-history';
-        return view($URI)->with($data);
+        return \standardResponse(
+            true,
+            'Transaction History Fetch Successful',
+            $data['transactions']
+        );
     }
 
-    public function getTransactions($params, $allTransactions){
-        $transactionModel = new Transactions;
-        if($allTransactions == true){
-            $myTransactions =  $transactionModel->getTransactionData($params);
-        } else {
-            $myTransactions =  $transactionModel->getTransactionDataViaWalletIDWithDateRange($params);
-        }
+    public function getTransactions($params)
+    {
+        $transactionModel = new Transactions();
+        $myTransactions = $transactionModel->getTransactionDataViaWalletIDWithDateRange(
+            $params
+        );
         return $myTransactions;
-        \Log::info("My Transactions " . print_r($myTransactions, true));
+        \Log::info('My Transactions ' . print_r($myTransactions, true));
     }
 
-    public static function beginTransaction($data){
-
+    public static function beginTransaction($data)
+    {
         //\Log::info("begin data" . print_r($data, true));
-       
+
         $transactionData = self::buildTransactionData($data);
-        
-        $transactionModel = new Transactions;
-        $saveData = $transactionModel->initializeTransactionData($transactionData);
-        if($saveData){
-            \Log::info("Transaction Initialized Successfully with data: " . print_r($transactionData, true));
+
+        $transactionModel = new Transactions();
+        $saveData = $transactionModel->initializeTransactionData(
+            $transactionData
+        );
+        if ($saveData) {
+            \Log::info(
+                'Transaction Initialized Successfully with data: ' .
+                    print_r($transactionData, true)
+            );
             return $transactionData;
         } else {
-            \Log::info("Transaction Failed to Initialized with data: " . print_r($transactionData, true));
+            \Log::info(
+                'Transaction Failed to Initialized with data: ' .
+                    print_r($transactionData, true)
+            );
             return $saveData;
         }
-        
     }
 
-    public static function appendTransaction($data){
-
-        //\Log::info("begin data" . print_r($data, true));
-       
-        $transactionData = self::buildTransactionData($data);
-        
-        $transactionModel = new Transactions;
-        $saveData = $transactionModel->insertTransactionData($transactionData);
-        if($saveData){
-            \Log::info("Transaction Inserted Successfully with data: " . print_r($transactionData, true));
-            return $transactionData;
-        } else {
-            \Log::info("Transaction Failed to Insert with data: " . print_r($transactionData, true));
-            return $saveData;
-        }
-        
-    }
-
-    public static function buildTransactionData($data){
+    public static function buildTransactionData($data)
+    {
         $transactionData = [];
 
-        if(isset($data['paymentData']['category']) && $data['paymentData']['category'] == "airtime"){
-            $transactionData['category'] = $data['paymentData']['category'];
-            $transactionData['service'] = $data['paymentData']['network'];
-            $transactionData['walletID'] = $data['sessiondata']['walletID'];
-            $transactionData['reference'] = "BLP".strtoupper(Generator::generateSecureRef(9));
-            $transactionData['phonenumber'] = $data['paymentData']['phone'];
-            $transactionData['amount'] = (int) $data['paymentData']['amount'];
-            $transactionData['status'] = "pending";
-        }
-
-        if(isset($data['paymentData']['category']) && $data['paymentData']['category'] == "data"){
-            $transactionData['category'] = $data['paymentData']['category'];
-            $transactionData['service'] = $data['paymentData']['network'];
-            $transactionData['walletID'] = $data['sessiondata']['walletID'];
-            $transactionData['reference'] = "BLP".strtoupper(Generator::generateSecureRef(9));
-            $transactionData['phonenumber'] = $data['paymentData']['phone'];
-            $transactionData['amount'] = (int) $data['paymentData']['amount'];
-            $transactionData['description'] = $data['paymentData']['description'];
-            $transactionData['dataplan'] = $data['paymentData']['dataplan'];
-            $transactionData['status'] = "pending";
-        }
-
-        if(isset($data['category']) && $data['category'] == "funding"){
+        if (isset($data['category']) && $data['category'] == 'funding') {
             $transactionData['category'] = $data['category'];
-            $transactionData['service'] = "card-fund";
+            $transactionData['service'] = 'card-fund';
             $transactionData['walletID'] = $data['walletID'];
             $transactionData['reference'] = $data['reference'];
             $transactionData['phonenumber'] = $data['phonenumber'];
             $transactionData['amount'] = (int) $data['amount'];
-            $transactionData['status'] = "pending";
-        }
-
-        if(isset($data['category']) && $data['category'] == "MNFD"){
-            $transactionData['category'] = $data['category'];
-            $transactionData['service'] = $data['service'];
-            $transactionData['walletID'] = $data['walletID'];
-            $transactionData['reference'] = "BLPMNFP".strtoupper(Generator::generateSecureRef(6));
-            $transactionData['phonenumber'] = $data['phonenumber'];
-            $transactionData['amount'] = (int) $data['amount'];
-            $transactionData['remark'] = $data['remark'];
-            $transactionData['status'] = "successful";
-        }
-
-        if(isset($data['paymentData']['category']) && $data['paymentData']['category'] == "tv"){
-            $transactionData['category'] = $data['paymentData']['category'];
-            $transactionData['service'] = $data['paymentData']['tvservice'];
-            $transactionData['walletID'] = $data['sessiondata']['walletID'];
-            $transactionData['reference'] = "BLP".strtoupper(Generator::generateSecureRef(9));
-            $transactionData['phonenumber'] = $data['paymentData']['phone'] ?? $data['paymentData']['sessiondata']['phonenumber'] ?? '';
-            $transactionData['amount'] = (int) $data['paymentData']['amount'];
-            $transactionData['status'] = "pending";
-            $transactionData['customerName'] = $data['paymentData']['validationData']['firstName'] . " " . $data['paymentData']['validationData']['lastName'];
-            $transactionData['customerNumber'] = $data['paymentData']['validationData']['customerNumber'] ?? '';
-            $transactionData['iuc'] = $data['paymentData']['iuc'] ?? '';
-            $transactionData['tvplan'] = $data['paymentData']['tvplan'] ?? '';
-
+            $transactionData['status'] = 'pending';
         }
 
         //\Log::info("TranData: " . print_r($transactionData, true));
         return $transactionData;
     }
 
-
-    public static function updateTransactionStatus($data){
-        
-        //\Log::info("Transaction Data: " . print_r($data, true));
-  
-        $status = $data['error'] == false ? "successful" : "failed";
-        
-        $actualPrice = (int) isset($data['data']['details']['price']) ? $data['data']['details']['price'] : 0;
-        $commission = $data['data']['amount'] - $actualPrice;
+    public static function updateTransactionStatus($data)
+    {
+        $status = $data['error'] == false ? 'successful' : 'failed';
         $params = [
             'status' => $status,
-            'fee' => $data['fee'] ?? 0,
-            'commission' => $commission
+            'fee' => 0,
+            'commission' => 0,
         ];
 
         $updateDetails = [
-            'reference' => $data['data']['reference'],
-            'data' => $params
+            'reference' => $data['reference'],
+            'data' => $params,
         ];
 
-        $transactionModel = new Transactions;
-        $updateTransaction = $transactionModel->updateTransactionData($updateDetails);
-        if($updateTransaction){
-            \Log::info("Transaction Updated Successfully");
+        $transactionModel = new Transactions();
+        $updateTransaction = $transactionModel->updateTransactionData(
+            $updateDetails
+        );
+        if ($updateTransaction) {
+            \Log::info('Transaction Updated Successfully');
         } else {
-            \Log::info("Transaction Failed to Update");
+            \Log::info('Transaction Failed to Update');
         }
     }
 
-    public static function findDuplicateTransactions($reference){
-        $transactionModel = new Transactions;
+    public static function findDuplicateTransactions($reference)
+    {
+        $transactionModel = new Transactions();
         $check = $transactionModel->getTransactionDataViaReference($reference);
-        if($check == false){
-            \Log::info("Transaction not exists");
+        if ($check == false) {
+            \Log::info('Transaction not exists');
             return false;
         } else {
-            \Log::info("Transaction exists");
+            \Log::info('Transaction exists');
             return true;
         }
     }
-  
 }

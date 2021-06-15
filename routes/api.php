@@ -12,7 +12,21 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+/**
+ * Authentication Routes
+ */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('/signup', 'AuthController@registerUser');
+Route::post('/login', 'AuthController@loginUser');
+
+Route::group(['prefix' => '/wallet', 'middleware' => 'jwt-auth'], function () {
+    Route::post('fund-wallet', 'WalletController@fundWallet');
+    Route::post('wallet-balance', 'WalletController@fetchMyBalance');
 });
+
+Route::group(
+    ['prefix' => '/transfer', 'middleware' => 'jwt-auth'],
+    function () {
+        Route::post('transfer-to-peer', 'ServicesController@transferToPeer');
+    }
+);

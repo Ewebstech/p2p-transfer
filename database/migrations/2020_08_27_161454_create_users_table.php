@@ -16,7 +16,6 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $collection) {
             $collection->bigIncrements('id');
             $collection->unique('phonenumber');
-            $collection->unique('email');
             $collection->timestamps();
         });
     }

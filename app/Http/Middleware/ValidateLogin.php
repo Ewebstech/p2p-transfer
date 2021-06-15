@@ -16,19 +16,6 @@ class ValidateLogin
      */
     public function handle($request, Closure $next)
     {
-        //if(!isset($_SESSION)) session_start();
-        if(!isset($_SESSION)) { session_start(); }
-        if(!isset($_SESSION['UserDetails'])){
-            
-            $_SESSION['PreviousUrl'] = "Dashboard"; 
-            return redirect('/login?cont');
-        } else {
-            return $next($request);
-        }
         return $next($request);
-       
-    
-        
     }
 }
-

@@ -20,211 +20,209 @@ use App\Http\Controllers\TransactionsController;
 
 class WalletController extends Controller
 {
-
-    public function fundWalletPage(Request $request){        
-        $data['page'] = $_REQUEST;
-        $UserDetails = $_SESSION['UserDetails'];
-        $data['sessiondata'] = $UserDetails;        
-        
-        \Log::info(print_r($data, true));
-
-        $URI= '/fundmywallet';
-        return view($URI)->with($data);
-    }
-
-    public function takePayment(Request $request){
+    public function fundWallet(Request $request)
+    {
         $params = parseRequest($request, true);
-        $UserDetails = $_SESSION['UserDetails'];
-        $params['walletID'] = $UserDetails['walletID'];
-        $params['email'] = $UserDetails['email'];
-        $params['category'] = "funding";
-        $params['phonenumber'] = $UserDetails['phonenumber'];
-        $params['reference'] = "BLPFUND".strtoupper(Generator::generateSecureRef(9));
+        $params['walletID'] = getWalletId($params['phonenumber']);
+        $params['category'] = 'funding';
+
+        $params['reference'] =
+            'FUND' . strtoupper(Generator::generateSecureRef(9));
         $amount = (int) $params['amount'];
-        $charges = 1.5/100 * $amount;
-        if($charges > 2000){
+        $charges = (1.5 / 100) * $amount;
+        if ($charges > 2000) {
             $charges = 2000;
         }
         $params['amount'] = $amount + $charges;
         $params['amountToCredit'] = $amount;
 
-        $paystack = new PaystackController;
-        $payment = $paystack->redirectToProvider($params);
-        
-        if($payment == false){
-            $status = "error";
-            $data = $payment['message'] ?? "Error Occured Initializing Payments";
-            return $this->returnOutput($status,$data);
+        $paystack = new PaystackController();
+        $paymentUrl = $paystack->redirectToProvider($params);
+
+        if ($paymentUrl == false) {
+            $msg = 'Error Occured Initializing Payments';
+            return \standardResponse(false, $msg);
         } else {
-            \Log::info("Back from PaystackController --- Rerouting to Url : ". print_r($payment, true));
-  
+            \Log::info(
+                'Back from PaystackController --- Rerouting to Url : ' .
+                    print_r($payment, true)
+            );
+
             // Start Transaction
-            $transactionData = TransactionsController::beginTransaction($params);
-            if($transactionData === false){
-                $status = "failure";
-                $data = "Transaction Error. Please Retry after 5mins";
-                return $this->returnOutput($status,$data);
+            $transactionData = TransactionsController::beginTransaction(
+                $params
+            );
+            if ($transactionData === false) {
+                $msg = 'Transaction Error. Please Retry after 5mins';
+                return \standardResponse(false, $msg);
             }
 
-            $status = 'success';
-            $url = $payment;
-            $data = 'Payment Initialized...Redirecting to Payment Provider';
-            return $this->returnOutput($status,$data,$url);
-            
+            $msg =
+                'Payment initialization successful. Please proceed with the url below to make payment';
+            $data = [
+                'url' => $paymentUrl,
+            ];
+            return \standardResponse(true, $msg, $data);
         }
-
-        
     }
 
-
-    public static function generateWalletId($walletString){
-        \Log::info("Generating Wallet ID .... ");
+    public static function generateWalletId($walletString)
+    {
+        \Log::info('Generating Wallet ID .... ');
         $WalletID = substr($walletString, -10);
-        \Log::info("Wallet ID Generated: " . $WalletID);
+        \Log::info('Wallet ID Generated: ' . $WalletID);
         return $WalletID;
     }
 
-    public static function getWalletBalance($walletID){
+    public function fetchMyBalance(Request $request)
+    {
+        $params = parseRequest($request, true);
+        $data = $this->getWalletBalance($params['walletId']);
+        return \standardResponse(true, 'Process Complete', $data);
+    }
 
-        $WalletModel = new Wallets;
+    public function getWalletBalance($walletID)
+    {
+        $WalletModel = new Wallets();
         $walletData = $WalletModel->getWalletData($walletID);
-        if($walletData !== false){
-            \Log::info("Balance Fetch Successful" . print_r($walletData, true));
+        if ($walletData !== false) {
+            \Log::info('Balance Fetch Successful' . print_r($walletData, true));
             $response = [
                 'balance' => (int) $walletData['balance'],
-                'error' => false
+                'error' => false,
             ];
             return $response;
         } else {
-            \Log::info("Balance Not Available, Defaulting to 0" . print_r($walletData, true));
+            \Log::info(
+                'Balance Not Available, Defaulting to 0' .
+                    print_r($walletData, true)
+            );
 
             $response = [
                 'balance' => 0,
-                'error' => false
+                'error' => false,
             ];
             return $response;
         }
+    }
 
-    } 
-
-    public static function checkWalletBalance(int $amount, $walletID){
+    public function checkWalletBalance(int $amount, $walletID)
+    {
         $walletBalanceData = self::getWalletBalance($walletID);
         $walletBalance = $walletBalanceData['balance'];
-        
-        if($walletBalance >= $amount){
+
+        if ($walletBalance >= $amount) {
             return true;
         } else {
             return false;
         }
-    } 
+    }
 
-    public static function creditWallet($amount, $walletID){
-
-        $WalletModel = new Wallets;
+    public static function creditWallet($amount, $walletID)
+    {
+        $WalletModel = new Wallets();
         $amountToCredit = (int) $amount;
-       
-        $isWalletData = $WalletModel->getWalletData($walletID);
-        if($isWalletData == false){
 
+        $isWalletData = $WalletModel->getWalletData($walletID);
+        if ($isWalletData == false) {
             $data = [
                 'walletID' => $walletID,
-                'balance' => $amountToCredit
+                'balance' => $amountToCredit,
             ];
 
             $walletCreditInfo = $WalletModel->saveWalletData($data);
-            if($walletCreditInfo){
-                \Log::info("Wallet Successfully Credited " . print_r($walletCreditInfo, true));
+            if ($walletCreditInfo) {
+                \Log::info(
+                    'Wallet Successfully Credited ' .
+                        print_r($walletCreditInfo, true)
+                );
                 return true;
             } else {
-                \Log::info("Wallet Credit Failed " . print_r($walletCreditInfo, true));
+                \Log::info(
+                    'Wallet Credit Failed ' . print_r($walletCreditInfo, true)
+                );
                 return false;
             }
-            
         } else {
-
             $previousBalance = (int) $isWalletData['balance'];
             $newBalance = $previousBalance + $amountToCredit;
 
             $data = [
-                'balance' => $newBalance
+                'balance' => $newBalance,
             ];
 
             $updateArray = [
                 'data' => $data,
-                'walletID' => $walletID
+                'walletID' => $walletID,
             ];
 
             $walletCreditInfo = $WalletModel->updateWalletData($updateArray);
 
-            if($walletCreditInfo){
+            if ($walletCreditInfo) {
                 \Log::info("Wallet Successfully Credited with $amountToCredit");
                 return true;
             } else {
-                \Log::info("Wallet Credit Failed ");
+                \Log::info('Wallet Credit Failed ');
                 return false;
             }
         }
-
     }
 
-    public static function debitWallet($amount, $walletID){
-
-        $WalletModel = new Wallets;
+    public static function debitWallet($amount, $walletID)
+    {
+        $WalletModel = new Wallets();
         $amountToDebit = (int) $amount;
-        
-        $isWalletData = $WalletModel->getWalletData($walletID);
-        if($isWalletData == false){
 
+        $isWalletData = $WalletModel->getWalletData($walletID);
+        if ($isWalletData == false) {
             $response = [
                 'balance' => 0,
-                'error' => true
+                'error' => true,
             ];
 
             return $response;
-            
         } else {
-
             $previousBalance = (int) $isWalletData['balance'];
             $newBalance = $previousBalance - $amountToDebit;
 
             $data = [
-                'balance' => $newBalance
+                'balance' => $newBalance,
             ];
 
             $updateArray = [
                 'data' => $data,
-                'walletID' => $walletID 
+                'walletID' => $walletID,
             ];
 
-            $updateDebitInformation = $WalletModel->updateWalletData($updateArray);
+            $updateDebitInformation = $WalletModel->updateWalletData(
+                $updateArray
+            );
 
-            if($updateDebitInformation){
+            if ($updateDebitInformation) {
+                \Log::info(
+                    'Wallet Successfully Debited: ' .
+                        print_r($updateDebitInformation, true)
+                );
 
-                \Log::info("Wallet Successfully Debited: " . print_r($updateDebitInformation, true));
-                
                 $response = [
                     'balance' => $newBalance,
-                    'error' => false
+                    'error' => false,
                 ];
 
                 return $response;
-
             } else {
-
-                \Log::info("Wallet Debit Failed " . print_r($updateDebitInformation, true));
+                \Log::info(
+                    'Wallet Debit Failed ' .
+                        print_r($updateDebitInformation, true)
+                );
 
                 $response = [
                     'balance' => $previousBalance,
-                    'error' => true
+                    'error' => true,
                 ];
 
                 return $response;
-
             }
-
-
         }
-
     }
-
 }
